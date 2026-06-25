@@ -1,14 +1,24 @@
 pipeline {
-    agent none
+    agent any
+
     stages {
-        stage('Example') {
-            agent any
-            options {
-                // Timeout counter starts BEFORE agent is allocated
-                timeout(time: 1, unit: 'SECONDS')
-            }
+
+        stage('Stop Old Container') {
             steps {
-                echo 'Hello World'
+                bat 'docker stop flask-container || exit 0'
+                bat 'docker rm flask-container || exit 0'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                bat 'docker build -t flask-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                bat 'docker run -d --name flask-container -p 5001:5000 flask-app'
             }
         }
     }
