@@ -1,5 +1,5 @@
 FROM python:3.11
-WORKDIR /9
+WORKDIR /o
 COPY . .
 RUN pip install -r requirements.txt
 EXPOSE 5001
